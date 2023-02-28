@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="static/styles.css" type="text/css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+        crossorigin="anonymous">
+</head>
+
+
+
+<body style="padding-top: 16px;" class="bg-dark" data-bs-theme="dark">
+    <div id="app">
+        <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <img class="img-fluid" src="static/images/codecamp_white.svg" width="300" height="50"
+                        alt="Southern Utah Code Camp" id="logo" data-height-percentage="54" data-actual-width="300" data-actual-height="50">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Devisions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Teams</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Rankings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Prizes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Venu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Rubric</a>
+                        </li>
+                    </ul>
+                    <div class="navbar-nav nav-item ms-auto">
+                        <a class="nav-link" href="#">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container px-4">
+            <div class="row">
+                <img class="img-fluid" src="static/images/hero.jpg">
+            </div>
+            <div class="row gx-5">
+                <div class="col p-3">
+                    <img class="img-fluid" src="static/images/codecamp_white.svg" width="300" height="50" alt="Southern Utah Code Camp"
+                        id="logo" data-height-percentage="54" data-actual-width="300" data-actual-height="50">
+                </div>
+                <div class="col p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
+                        viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-sm px-4">
+            <form>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="email">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingPassword" placeholder="Password" v-model="password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-3"></div>
+                    <button type="submit" class="btn btn-primary" v-on:click="login()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@3"></script>
+<script src="client.js"></script>
+<style>
+    #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+    }
+
+    @import'~bootstrap/css/bootstrap.css'
+</style>
+</html>
