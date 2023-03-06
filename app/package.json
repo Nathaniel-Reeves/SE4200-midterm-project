@@ -1,7 +1,6 @@
 {
   "name": "se4200-midterm-project",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,11 +9,18 @@
   "author": "Nathaniel Reeves",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "mongodb": "^5.1.0",
-    "mongoose": "^7.0.0"
-  }
+    "mongoose": "^7.0.0",
+    "n": "^9.0.1",
+    "stable": "^0.1.8",
+    "validator": "^13.9.0"
+  },
+  "description": ""
 }
