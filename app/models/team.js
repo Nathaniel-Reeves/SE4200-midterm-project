@@ -21,7 +21,7 @@ const teamSchema = new mongoose.Schema({
     ],
     catagory: {
         type: String,
-        enum: ["App", "Game", "Maker", "Rookie", "Rookie Starter Kit", "Rookie Jr Starter Kit", "Lego League"],
+        enum: ["app", "game", "maker", "rookie", "rookie_starter_kit", "rookie_jr_starter_kit", "lego_league"],
         default: "App",
         required: [true, "Catagory is required"],
     },

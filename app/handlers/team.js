@@ -3,6 +3,33 @@ const user_helper = require('../handlers/user');
 const { User } = require('../models/user');
 
 function team_handlers(app) {
+    app.get("/teams", async (req, res) => {
+        var catagory = req.query.catagory;
+        var request = "GET /teams";
+        if (catagory) {
+            request += "?catagory=" + catagory;
+        }
+        console.log(request);
+        try {
+            if (catagory) {
+                var teams = await model.Team.find({ catagory: catagory })
+                .populate('team_members')
+                .populate('judge_scores')
+                .exec();
+                return res.status(200).json(teams);
+            } else {
+                var teams = await model.Team.find({})
+                .populate('team_members')
+                .populate('judge_scores')
+                .exec();
+                return res.status(200).json(teams);
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("Something went wrong.");
+        }
+    });
+
     app.post("/teams", async (req, res) => {
         console.log("POST /teams");
         console.log("BODY: ", req.body);
