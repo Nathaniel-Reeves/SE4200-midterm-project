@@ -242,6 +242,117 @@
                         
                     </div>
 
+                    <!-- View Team Content -->
+                    <div class="container" v-if="['View Team'].includes(active_view)">
+                    
+                        <div class="row justify-content-start">
+
+                            <div class="card px-0">
+                                <h3 class="card-title mt-4">{{ team_selected.team_name }}</h3>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Team Devision: {{ team_selected.team_division }}</li>
+                                        <li class="list-group-item">Team Catagory: {{ team_selected.catagory }}</li>
+                                    </ul>
+                                    <h4 class="card-title mt-4">Team Members</h4>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" v-for="member in team_selected.team_members">{{ member.first_name + " " + member.last_name + " " + member.email }}</li>
+                                    </ul>
+                                    <h4 class="card-title mt-4">Team Scores</h4>
+
+                                    <div>
+                                        <img src="static/images/ds_radar.png" class="img-thumbnail m-2 p-3 bg-white"></img>
+                                    </div>
+
+                                    <h4 class="card-title mt-4">Judge Feedback</h4>
+
+                                    <h5 class="card-title mt-4">Acclamations</h5>
+                                    <span class="badge text-bg-success m-2 fs-5" v-for="acclaim in team_selected.total_acclaims">{{ acclaim }}</span>
+
+
+                                    <h5 class="card-title mt-4">Constructive Criticisms</h5>
+                                    <span class="badge text-bg-danger m-2 fs-5" v-for="criticism in team_selected.total_criticisms">{{ criticism }}</span>
+
+                                </div>
+
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+
+                    <!-- Judge Team Form -->
+                    <div class="container" v-if="['Judge Team'].includes(active_view)">
+                    
+                        <div class="row justify-content-start">
+                    
+                            <div class="card px-0">
+                                <h3 class="card-title mt-4">{{ team_selected.team_name }}</h3>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Team Devision: {{ team_selected.team_division }}</li>
+                                        <li class="list-group-item">Team Catagory: {{ team_selected.catagory }}</li>
+                                    </ul>
+                                    <h4 class="card-title mt-4">Team Members</h4>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" v-for="member in team_selected.team_members">{{ member.first_name + " "
+                                            + member.last_name + " " + member.email }}</li>
+                                    </ul>
+
+                                    <div v-for="error in validation_errors">
+                                        <div class="card border-danger m-3">
+                                            <div class="card-body">
+                                                <p class="card-title text-danger">{{error.message}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-for="message in success_messages">
+                                        <div class="card border-success m-3">
+                                            <div class="card-body">
+                                                <p class="card-title text-success">{{message.message}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <h4 class="card-title mt-4">Catagory Scores</h4>
+
+                                    <label for="level_of_complexity_judge_input" class="form-label mt-3">Level of Complexity</label>
+                                    <input type="range" class="form-range" min="1" max="5" id="level_of_complexity_judge_input" v-model="level_of_complexity_judge_input">
+
+                                    <label for="uniquness_judge_input" class="form-label mt-3">Uniqueness</label>
+                                    <input type="range" class="form-range" min="1" max="5" id="uniquness_judge_input" v-model="uniquness_judge_input">
+
+                                    <label for="commercial_viability_judge_input" class="form-label mt-3">Commercial Viability</label>
+                                    <input type="range" class="form-range" min="1" max="5" id="commercial_viability_judge_input" v-model="commercial_viability_judge_input">
+
+                                    <label for="aethetics_judge_input" class="form-label mt-3">Aethetics</label>
+                                    <input type="range" class="form-range" min="1" max="5" id="aethetics_judge_input" v-model="aethetics_judge_input">
+
+                                    <label for="completeness_judge_input" class="form-label mt-3">Completeness</label>
+                                    <input type="range" class="form-range mb-3" min="1" max="5" id="completeness_judge_input" v-model="completeness_judge_input">
+
+                    
+                                    <h4 class="card-title mt-4">Judge Feedback</h4>
+                    
+                                    <h5 class="card-title mt-4">Acclamations</h5>
+                                    
+                    
+                    
+                                    <h5 class="card-title mt-4">Constructive Criticisms</h5>
+
+                                    <div class="form-floating m-3">
+                                        <button type="button" class="btn btn-primary m-3" v-on:click="submit_score()">Submit</button>
+                                    </div>
+                                    
+                    
+                                </div>
+                    
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+
                     <!-- Teams Content -->
                     <div class="container" v-if="['Teams'].includes(active_view)">
                     
@@ -260,7 +371,7 @@
                                                 <h2 class="accordion-header" id="headingOne">
                                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                                         aria-expanded="true" aria-controls="collapseOne">
-                                                        Rookie Day Camp Devision
+                                                        Rookie Day Camp Devision 
                                                     </button>
                                                 </h2>
                                                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
@@ -270,9 +381,19 @@
                                                             <div v-for="team in filter_catagory">
                                                                 <div v-if="team.team_division == 'rookie_day_camp'">
                                                                     <a class="list-group-item list-group-item-action" aria-current="true">
-                                                                        <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between ">
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
-                                                                            <span v-for="team_member in team.team_members" class="badge bg-primary rounded-pill">{{team_member.first_name}}</span>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <span v-for="team_member in team.team_members"
+                                                                                    class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
+                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                    Team</button>
+                                                                                <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    Team</button>
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -295,9 +416,19 @@
                                                             <div v-for="team in filter_catagory">
                                                                 <div v-if="team.team_division == 'rookie'">
                                                                     <a class="list-group-item list-group-item-action" aria-current="true">
-                                                                        <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between ">
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
-                                                                            <span v-for="team_member in team.team_members" class="badge bg-primary rounded-pill">{{team_member.first_name}}</span>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <span v-for="team_member in team.team_members"
+                                                                                    class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
+                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                    Team</button>
+                                                                                <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    Team</button>
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -311,7 +442,6 @@
                                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                                                         aria-expanded="false" aria-controls="collapseThree">
                                                         Novice Devision
-                                                    </button>
                                                 </h2>
                                                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                                                     data-bs-parent="#accordionExample">
@@ -320,9 +450,19 @@
                                                             <div v-for="team in filter_catagory">
                                                                 <div v-if="team.team_division == 'novice'">
                                                                     <a class="list-group-item list-group-item-action" aria-current="true">
-                                                                        <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between ">
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
-                                                                            <span v-for="team_member in team.team_members" class="badge bg-primary rounded-pill">{{team_member.first_name}}</span>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <span v-for="team_member in team.team_members"
+                                                                                    class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
+                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                    Team</button>
+                                                                                <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    Team</button>
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -345,9 +485,19 @@
                                                             <div v-for="team in filter_catagory">
                                                                 <div v-if="team.team_division == 'intermediate'">
                                                                     <a class="list-group-item list-group-item-action" aria-current="true">
-                                                                        <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between ">
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
-                                                                            <span v-for="team_member in team.team_members" class="badge bg-primary rounded-pill">{{team_member.first_name}}</span>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <span v-for="team_member in team.team_members"
+                                                                                    class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
+                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                    Team</button>
+                                                                                <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    Team</button>
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -371,9 +521,18 @@
                                                             <div v-for="team in filter_catagory">
                                                                 <div v-if="team.team_division == 'industry'">
                                                                     <a class="list-group-item list-group-item-action" aria-current="true">
-                                                                        <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between ">
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
-                                                                            <span v-for="team_member in team.team_members" class="badge p-1 text-bg-secondary">{{team_member.first_name}}</span>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <span v-for="team_member in team.team_members" class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
+                                                                            <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
+                                                                                v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
+                                                                            <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                Team</button>
+                                                                            <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
+                                                                                v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                Team</button>
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -392,6 +551,7 @@
                     </div>
 
                 </div>
+
                 <!-- Sponsors -->
                 <div v-if="!['Login','Register'].includes(active_view)">
                     <div class="card">
@@ -434,7 +594,7 @@
             <div v-for="error in validation_errors">
                 <div class="card border-danger m-3">
                     <div class="card-body">
-                    <p class="card-title text-danger"><strong>{{error.key}}: </strong>{{error.message}}</p>
+                        <p class="card-title text-danger">{{error.message}}</p>
                     </div>
                 </div>
             </div>
@@ -447,14 +607,66 @@
                     <input type="password" class="form-control text-dark" id="floatingPassword" placeholder="Password" v-model="password">
                     <label for="floatingPassword">Password</label>
                 </div>
-                <div class="form-floating m-3"></div>
-                    <button type="submit" class="btn btn-primary" v-on:click="login()">Submit</button>
+                <div class="form-floating m-3">
+                    <button type="button" class="btn btn-primary m-3" v-on:click="change_view('Register')">Register</button>
+                    <button type="button" class="btn btn-primary m-3" v-on:click="login()">Login</button>
                 </div>
             </form>
         </div>
 
+        <!-- Register Form -->
+        
+        <div class="container g-5 p-5" v-if="['Register'].includes(active_view)">
+            <h1 class="text-center p-2">Register New Account</h1>
+            <div v-for="error in validation_errors">
+                <div class="card border-danger m-3">
+                    <div class="card-body">
+                        <p class="card-title text-danger">{{error.message}}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-for="message in success_messages">
+                <div class="card border-success m-3">
+                    <div class="card-body">
+                        <p class="card-title text-success">{{message.message}}</p>
+                    </div>
+                </div>
+            </div>
+            <form>
+                <div class="form-floating m-3">
+                    <input type="text" class="form-control text-dark" id="floatingInput1" placeholder="first name" v-model="register_first_name">
+                    <label for="floatingInput1">First Name</label>
+                </div>
+                <div class="form-floating m-3">
+                    <input type="text" class="form-control text-dark" id="floatingInput2" placeholder="last name" v-model="register_last_name">
+                    <label for="floatingInput2">Last Name</label>
+                </div>
+                <div class="form-floating m-3">
+                    <input type="text" class="form-control text-dark" id="floatingInput3" placeholder="name@example.com"
+                        v-model="register_email">
+                    <label for="floatingInput3">Email address</label>
+                </div>
+                <div class="form-floating m-3">
+                    <input type="password" class="form-control text-dark" id="floatingPassword1" placeholder="Password"
+                        v-model="register_password">
+                    <label for="floatingPassword1">Password</label>
+                </div>
+                <div class="form-floating m-3">
+                    <input type="password" class="form-control text-dark" id="floatingPassword2" placeholder="Password"
+                        v-model="register_password_confirmation">
+                    <label for="floatingPassword2">Password</label>
+                </div>
+                <div class="form-floating m-3">
+                    <button type="button" class="btn btn-primary m-3" v-on:click="change_view('Login')">Back to Login</button>
+                    <button type="button" class="btn btn-primary m-3" v-on:click="register()">Register</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 

@@ -26,7 +26,7 @@ function team_handlers(app) {
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).send("Something went wrong.");
+            return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
         }
     });
 
@@ -54,17 +54,17 @@ function team_handlers(app) {
                     }
                     if (error.code === 11000) {
                         console.log("Team already exists.");
-                        return res.status(401).send("Team already exists.");
+                        return res.status(401).send(JSON.stringify([{"message": "Team already exists.","status":"error"}]));
                     }
                     console.log("Something went wrong.")
                     console.log(error);
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
@@ -78,12 +78,12 @@ function team_handlers(app) {
                     var team = await model.Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 try {
@@ -91,14 +91,14 @@ function team_handlers(app) {
                     // Check if the user exists.
                     if (!user) {
                         console.log("User does not exist.");
-                        return res.status(404).send("User does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "User does not exist.","status":"error"}]));
                     }
                     console.log("User found.");
 
                     // Check if the user is a contestant
                     if (!user.contestant) {
                         console.log("User is not a contestant.");
-                        return res.status(401).send("User is not a contestant.");
+                        return res.status(401).send(JSON.stringify([{"message": "User is not a contestant.","status":"error"}]));
                     }
                     console.log("User is a contestant.");
 
@@ -106,28 +106,28 @@ function team_handlers(app) {
                     var flag = await model.Team.find({ "team_members": user._id }).exec();
                     if (flag.length > 0) {
                         console.log("User is already part of a team.");
-                        return res.status(401).send("User is already part of a team.");
+                        return res.status(401).send(JSON.stringify([{"message": "User is already part of a team.","status":"error"}]));
                     }
                     console.log("User is not already part of a team.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid User id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid User id.","status":"error"}]));
                 }
                 
                 // Add user to the team.
                 try {
                     model.Team.findByIdAndUpdate({ _id:req.params.teamid}, {$push: {team_members:req.body._id}}).exec();
                     console.log("User added to team.");
-                    return res.status(201).send("User added to team.");
+                    return res.status(201).send(JSON.stringify([{"message": "User added to team.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
@@ -141,19 +141,19 @@ function team_handlers(app) {
                     var team = await model.Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 // Check if user is part of the team.
                 const exists = await model.Team.findOne({ "_id": req.params.teamid,"team_members": req.body._id }).exec();
                 if (!exists) {
                     console.log("User is not part of the team.");
-                    return res.status(401).send("User is not part of the team.");
+                    return res.status(401).send(JSON.stringify([{"message": "User is not part of the team.","status":"error"}]));
                 }
                 console.log("User is part of the team.");
 
@@ -161,17 +161,17 @@ function team_handlers(app) {
                 try {
                     model.Team.findByIdAndUpdate({ _id:req.params.teamid}, {$pull: {team_members:req.body._id}}).exec();
                     console.log("User removed from team.");
-                    return res.status(200).send("User removed from team.");
+                    return res.status(200).send(JSON.stringify([{"message": "User removed from team.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
 
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
@@ -185,12 +185,12 @@ function team_handlers(app) {
                     var team = await model.Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 // Update team attributes.
@@ -204,7 +204,7 @@ function team_handlers(app) {
                         },
                         {new: true, runValidators: true}).exec();
                     console.log("Team updated.");
-                    return res.status(200).send("Team updated.");
+                    return res.status(200).send(JSON.stringify([{"message": "Team updated.","status":"ok"}]));
                 } catch (error) {
                     if (error.name === "ValidationError") {
                         let errors = {};
@@ -220,7 +220,7 @@ function team_handlers(app) {
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
@@ -234,28 +234,28 @@ function team_handlers(app) {
                     var team = await model.Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send([{"message": "Invalid Team id.","status":"error"}]);
                 }
 
                 // Delete team.
                 try {
                     await model.Team.findByIdAndRemove(req.params.teamid).exec();
                     console.log("Team deleted.");
-                    return res.status(200).send("Team deleted.");
+                    return res.status(200).send(JSON.stringify([{"message": "Team deleted.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 }

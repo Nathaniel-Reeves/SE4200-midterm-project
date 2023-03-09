@@ -7,6 +7,8 @@ app = express();
 
 const { ConnectionClosedEvent } = require('mongodb');
 
+const port = process.env.PORT || 8080;
+
 // Setup sessions
 app.use(express.static(__dirname+'/views'));
 const oneDay = 1000 * 60 * 60 * 24;
@@ -24,7 +26,6 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     console.log(session);
-    res.setHeader('Access-Control-Allow-Origin','*')
     console.log("GET /")
     res.render('index.html');
 });
@@ -33,6 +34,6 @@ require('./handlers/user').user_handlers(app);
 require('./handlers/judge_score').judge_score_handlers(app);
 require('./handlers/team').team_handlers(app);
 
-app.listen(8080, function () {
-    console.log('Codecamp app listening on port 8080!');
+app.listen(port, function () {
+    console.log(`Codecamp app listening on port ${port}!`);
 });

@@ -23,11 +23,11 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is a required field"],
         validate(value) {
             if (!validator.isLength(value, { min: 6, max: 1000 })) {
-                throw Error("Length of the password should be between 6-1000");
+                throw {"message":"Length of the password should be between 6-1000","status":"error"};
             }
 
             if (value.toLowerCase().includes("password")) {
-                throw Error('The password should not contain the keyword "password"!');
+                throw {"message":'The password should not contain the keyword "password"!',"status":"error"};
             }
         },
     },

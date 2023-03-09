@@ -6,7 +6,7 @@ const mongoose = require('../models/mongoose_conf');
 
 function judge_score_handlers(app) {
     app.post('/team/:teamid/judge_score', async (req, res) => {
-        console.log(`POST /team/${req.params.teamid}/judge_score`);
+        console.log(`POST /teams/${req.params.teamid}/judge_score`);
         console.log("BODY: ", req.body);
         user_helper.valid_user_roll(req, res, "judge").then(async flag => {
             if (flag) {
@@ -15,12 +15,12 @@ function judge_score_handlers(app) {
                     var team = await Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
-                    console.log("Team found.");
+                    console.log([{"message": "Team found.","status":"error"}]);
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 // Get the id of the Judge.
@@ -33,7 +33,7 @@ function judge_score_handlers(app) {
                 }).exec();
                 if (judge_score) {
                     console.log("Judge has already scored this team.");
-                    return res.status(409).send("Judge has already scored this team.");
+                    return res.status(409).send(JSON.stringify([{"message": "Judge has already scored this team.","status":"error"}]));
                 }
                 console.log("Judge score does not exist for this team.");
 
@@ -77,7 +77,7 @@ function judge_score_handlers(app) {
                 } else {
                     console.log("New judge score record not created.");
                     session.abortTransaction();
-                    return res.status(409).send("New judge score record not created.");
+                    return res.status(409).send(JSON.stringify([{"message": "New judge score record not created.","status":"error"}]));
                 }
 
                 // Add new score record to team.
@@ -85,21 +85,21 @@ function judge_score_handlers(app) {
                     await Team.findByIdAndUpdate({ _id:req.params.teamid}, {$push: {judge_scores:record_id}}).exec();
                     console.log("New score record added to team.");
                     session.commitTransaction();
-                    return res.status(201).send("New score record added to team.");
+                    return res.status(201).send(JSON.stringify([{"message": "New score record added to team.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
                     session.abortTransaction();
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
-    app.delete('/team/:teamid/judge_score', async (req, res) => {
+    app.delete('/teams/:teamid/judge_score', async (req, res) => {
         console.log(`DELETE /team/${req.params.teamid}/judge_score`);
         console.log("BODY: ", req.body);
         user_helper.valid_user_roll(req, res, "judge").then(async flag => {
@@ -109,12 +109,12 @@ function judge_score_handlers(app) {
                     var team = await Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 // Get the id of the Judge.
@@ -132,7 +132,7 @@ function judge_score_handlers(app) {
                 if (!judge_score) {
                     console.log("Judge score does not exist for this team.");
                     session.abortTransaction();
-                    return res.status(404).send("Judge score does not exist for this team.");
+                    return res.status(404).send(JSON.stringify([{"message": "Judge score does not exist for this team.","status":"error"}]));
                 } else {
                     var record_id = judge_score._id;
                 }
@@ -148,7 +148,7 @@ function judge_score_handlers(app) {
                     console.log("Judge has not scored this team.");
                     console.log(error);
                     session.abortTransaction();
-                    return res.status(409).send("Judge has not scored this team.");
+                    return res.status(409).send(JSON.stringify([{"message": "Judge has not scored this team.","status":"error"}]));
                 }
 
                 // Delete judge score from the team.
@@ -156,21 +156,21 @@ function judge_score_handlers(app) {
                     await Team.findByIdAndUpdate({ _id:req.params.teamid}, {$pull: {judge_scores:record_id}}).exec();
                     console.log("Judge score record deleted from team.");
                     session.commitTransaction();
-                    return res.status(200).send("Judge score record deleted.");
+                    return res.status(200).send(JSON.stringify([{"message": "Judge score record deleted.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
                     session.abortTransaction();
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 
-    app.put('/team/:teamid/judge_score', async (req, res) => {
+    app.put('/teams/:teamid/judge_score', async (req, res) => {
         console.log(`PUT /team/${req.params.teamid}/judge_score`);
         console.log("BODY: ", req.body);
         user_helper.valid_user_roll(req, res, "judge").then(async flag => {
@@ -180,12 +180,12 @@ function judge_score_handlers(app) {
                     var team = await Team.findById(req.params.teamid).exec();
                     if (!team) {
                         console.log("Team does not exist.");
-                        return res.status(404).send("Team does not exist.");
+                        return res.status(404).send(JSON.stringify([{"message": "Team does not exist.","status":"error"}]));
                     }
                     console.log("Team found.");
                 } catch (error) {
                     console.log(error);
-                    return res.status(422).send("Invalid Team id.");
+                    return res.status(422).send(JSON.stringify([{"message": "Invalid Team id.","status":"error"}]));
                 }
 
                 // Get the id of the Judge.
@@ -198,7 +198,7 @@ function judge_score_handlers(app) {
                 }).exec();
                 if (!judge_score) {
                     console.log("Judge score does not exist for this team.");
-                    return res.status(409).send("Judge has already scored this team.");
+                    return res.status(409).send(JSON.stringify([{"message": "Judge has already scored this team.","status":"error"}]));
                 }
                 console.log("Judge has scored this team.");
 
@@ -219,16 +219,16 @@ function judge_score_handlers(app) {
                         }
                     }, {new: true, runValidators: true}).exec();
                     console.log("Judge score record updated.");
-                    return res.status(200).send("Judge score record updated.");
+                    return res.status(200).send(JSON.stringify([{"message": "Judge score record updated.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
-                    return res.status(500).send("Something went wrong.");
+                    return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));
                 }
             }
         }).catch((error) => {
             console.log('Bad Request: Invalid user id.');
             console.log(error);
-            return res.status(422).send('Bad Request: Invalid user id.');
+            return res.status(422).send(JSON.stringify([{"message": 'Bad Request: Invalid user id.',"status":"error"}]));
         });
     });
 }
