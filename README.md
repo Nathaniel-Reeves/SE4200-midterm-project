@@ -1,11 +1,69 @@
 # SE4200-midterm-project
 Web II midterm project.  A simple web app to help teams and judges at codecamp.
 
+Here is the deployed application link:
+http://codecamp.us-east-1.elasticbeanstalk.com/
+
+If you would like to explore the app without creating an account, here are some credentials you can use.
+
+### All permissions allowed
+
+```json
+{
+    "email": "john@example.com",
+    "password": "asdfasdf123",
+    "first_name": "John",
+    "last_name": "Doe",
+}
+```
+
+### Judge permissions only
+
+```json 
+{
+    "email": "jane@example.com",
+    "password": "myasdfsadfsd",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "judge": true
+}
+
+```
+### Contestant permissions only
+
+```json
+{
+    "email": "amy@example.com",
+    "password": "letmein",
+    "first_name": "Amy",
+    "last_name": "Brown"
+}
+```
+
+All user passwords are stored as encrypted hashes using bcrypt.
+
 ## Submission Notes
 
 Unfortunately, I did not get this project finished as much as I'd like it to be.  The back end was completely done with solid validation for every input and great feedback for each output.  However, I did not leave enough time to complete the clint side of this project.  
 
 I understand this might dock me on the grade, however I would like to concider giving me some leway.  There was so much I learned working on this project and I put so much time and effort into it.  I just allowed my project to get a bit larger than I could handle in this time frame.  By the time the big presentation comes around, this project will be much more complete.
+
+A list of ideas I wanted to implement but didn't get around to..
+
+1. A server synced countdown timer that is configured through a admin console.
+1. The ability to change what is displayed on the website from the admin console.  Such as sponsorship ads and other branding.
+1. A judge console that is personalized to the account of the user. From this console, a judge could add, change, or delete judge entries as needed.
+1. A attendent console.  This is meant to be for the front desk person that could help contestants with changes to their team while at the codecamp event. 
+1. A radar chart that displays the results of each team in convenient format.  I tried my best to get chartjs to work with vue however I couldn't figure it out.  As a placeholder for this feature, I included a radar chart image I found on Google.
+
+
+## Visual Design Process
+
+I used Figma to create the wireframe and story board for this project. 
+Here is a link to the figma project page for your viewing.  I figured this would be easiest to do instead of a bunch of PDF files.
+
+https://www.figma.com/file/lhDovqDS1JVYKGXaRlAbHK/Code-Camp-Score-Tool?node-id=14%3A214&t=yTIbnXjVogmyr1Ly-1
+
 
 ## Data Resources
 
