@@ -53,6 +53,7 @@ A list of ideas I wanted to implement but didn't get around to..
 1. A server synced countdown timer that is configured through a admin console.
 1. The ability to change what is displayed on the website from the admin console.  Such as sponsorship ads and other branding.
 1. The ability to save a logged in state for a user.  It looks like I need a extension to vue to get this to work. I tried to mess with it but ultimately gave up to try and finish the rest of this assignment.
+1. Include better photography for the home page and other pages.  
 1. A judge console that is personalized to the account of the user. From this console, a judge could add, change, or delete judge entries as needed.
 1. A attendent console.  This is meant to be for the front desk person that could help contestants with changes to their team while at the codecamp event. 
 1. A radar chart that displays the results of each team in convenient format.  I tried my best to get chartjs to work with vue however I couldn't figure it out.  As a placeholder for this feature, I included a radar chart image I found on Google.
