@@ -14,7 +14,7 @@ Vue.createApp({
                 email: '',
                 logged_in: false,
                 contestant: false,
-                judge: true,
+                judge: false,
                 attendant: false,
                 admin: false
             },
