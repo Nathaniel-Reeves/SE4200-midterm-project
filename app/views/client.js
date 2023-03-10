@@ -1,5 +1,6 @@
 
-Vue.createApp({
+
+const app = Vue.createApp({
     data() {
         return {
             level_of_complexity_judge_input:1,
@@ -127,15 +128,15 @@ Vue.createApp({
             this.validation_errors = [];
             this.success_messages = [];
             var data = {
-                "uniquness_score" : this.uniquness_judge_input,
+                "uniqueness_score" : this.uniquness_judge_input,
                 "commercial_viability_score" : this.commercial_viability_judge_input,
-                "aethetics_score" : this.aethetics_judge_input,
+                "aethetic_score" : this.aethetics_judge_input,
                 "completeness_score" : this.completeness_judge_input,
                 "level_of_complexity_score" : this.level_of_complexity_judge_input,
                 "criticisms": [],
                 "acclaims": []
             }
-            fetch(this.origin + '/team/' + this.team_selected._id + '/judge_score', {
+            fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -147,6 +148,85 @@ Vue.createApp({
                     response.json().then(data => {
                         this.success_messages = data;
                     });
+                    this.get_teams("all");
+                } else {
+                    response.json().then(data => {
+                        this.validation_errors = data;
+                    });
+                }
+            });
+        },
+        select_judgement: function (team) {
+            this.validation_errors = [];
+            this.success_messages = [];
+            var judgement = {};
+            for (i in team.judge_scores) {
+                if (team.judge_scores[i].judgeId == this.session_details._id) {
+                    judgement = team.judge_scores[i];
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                this.level_of_complexity_judge_input = judgement.level_of_complexity_score;
+                this.uniquness_judge_input = judgement.uniqueness_score;
+                this.commercial_viability_judge_input = judgement.commercial_viability_score;
+                this.aethetics_judge_input = judgement.aethetic_score;
+                this.completeness_judge_input = judgement.completeness_score;
+            } else {
+                this.level_of_complexity_judge_input = 1;
+                this.uniquness_judge_input = 1;
+                this.commercial_viability_judge_input = 1;
+                this.aethetics_judge_input = 1;
+                this.completeness_judge_input = 1;
+            }
+
+        },
+        edit_judgement: function () {
+            this.validation_errors = [];
+            this.success_messages = [];
+            var data = data = {
+                "uniqueness_score" : this.uniquness_judge_input,
+                "commercial_viability_score" : this.commercial_viability_judge_input,
+                "aethetic_score" : this.aethetics_judge_input,
+                "completeness_score" : this.completeness_judge_input,
+                "level_of_complexity_score" : this.level_of_complexity_judge_input,
+                "criticisms": [],
+                "acclaims": []
+            }
+            fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                console.log(response);
+                if (response.status === 201) {
+                    response.json().then(data => {
+                        this.success_messages = data;
+                    });
+                    this.get_teams("all");
+                } else {
+                    response.json().then(data => {
+                        this.validation_errors = data;
+                    });
+                }
+            });
+        },
+        delete_judgement: function () {
+            this.validation_errors = [];
+            this.success_messages = [];
+            fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
+                method: 'DELETE'
+            }).then(response => {
+                console.log(response);
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        this.success_messages = data;
+                    });
+                    this.get_teams("all");
+                    this.change_view("Teams");
                 } else {
                     response.json().then(data => {
                         this.validation_errors = data;
@@ -155,7 +235,10 @@ Vue.createApp({
             });
         },
         select_team: function (team) {
+            this.validation_errors = [];
+            this.success_messages = [];
             console.log("Select Team: " + team);
+
             function format_string(str) {
                 var new_str = str.toLowerCase()
                     .split('_')
@@ -257,7 +340,11 @@ Vue.createApp({
                     response.json().then(data => {
                         this.session_details = data;
                         this.session_details.logged_in = true;
+                        this.email = "";
+                        this.password = "";
                         this.logged_in_menus();
+                        console.log(this.session_details);
+                        this.get_teams("all");
                         this.change_view('Home');
                     });
                 } else {
@@ -274,11 +361,14 @@ Vue.createApp({
             });
         },
         logout: function () {
+            this.validation_errors = [];
+            this.success_messages = [];
             fetch(window.location.origin + "/logout", {
                 method: 'GET'
             }).then(response => {
                 if (response.status == 200) {
                     this.session_details = {
+                        _id: "",
                         first_name: '',
                         last_name: '',
                         email: '',
@@ -288,6 +378,7 @@ Vue.createApp({
                         attendant: false,
                         admin: false
                     }
+                    this.get_teams("all");
                     this.nav_items = this.default_nav_items;
                 } else {
                     response.json().then(data => {
@@ -349,6 +440,18 @@ Vue.createApp({
                 });
             }
         },
+        check_judgement_on_team: function(team) {
+            if (!this.session_details.judge) {
+                return false;
+            }
+            // get judge ids on team
+            var judge_ids = [];
+            for (i in team.judge_scores) (
+                judge_ids.push(team.judge_scores[i].judgeId)
+            );
+
+            return judge_ids.includes(this.session_details._id);
+        },
         change_view: function (view) {
             this.active_view = view;
             for (i in this.nav_items) {
@@ -368,8 +471,12 @@ Vue.createApp({
                 }).then(response => {
                     if (response.status == 200) {
                         response.json().then(data => {
-                            console.log(data);
+                            console.log("DATA: ", data);
                             this.teams = data;
+                            for (i in this.teams) {
+                                this.teams[i].judged = this.check_judgement_on_team(this.teams[i]);
+                            }
+                            console.log("CHECKED: ", this.teams);
                         });
                     }
                 });
@@ -382,8 +489,12 @@ Vue.createApp({
                 }).then(response => {
                     if (response.status == 200) {
                         response.json().then(data => {
-                            console.log(data);
+                            console.log("DATA: ", data);
                             this.teams = data;
+                            for (i in this.teams) {
+                                this.teams[i].judged = this.check_judgement_on_team(this.teams[i]);
+                            }
+                            console.log("CHECKED: ", this.teams);
                         });
                     }
                 });
@@ -443,4 +554,4 @@ Vue.createApp({
         this.nav_items = this.default_nav_items;
         this.logged_in_menus();
     }
-}).mount('#app')
+}).mount('#app');

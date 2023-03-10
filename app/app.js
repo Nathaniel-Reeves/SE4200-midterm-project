@@ -26,6 +26,7 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     console.log(session);
+    session=req.session;
     console.log("GET /")
     res.render('index.html');
 });

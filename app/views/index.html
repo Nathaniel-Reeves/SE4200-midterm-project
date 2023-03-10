@@ -94,6 +94,17 @@
                         </div>
                     </div>
 
+                    <div class="card border-danger mb-3" v-show="validation_errors" v-for="error in validation_errors">
+                        <div class="card-body">
+                            <p class="card-title text-danger">{{error.message}}</p>
+                        </div>
+                    </div>
+                    <div class="card border-success mb-3" v-show="success_messages" v-for="message in success_messages">
+                        <div class="card-body">
+                            <p class="card-title text-success">{{message.message}}</p>
+                        </div>
+                    </div>
+
                     <div class="my-3 .d-sm-none .d-md-block">
                         <div id="carouselExampleAutoplaying" class="carousel-fade" data-bs-ride="carousel" data-bs-touch="false">
                             <div class="carousel-inner">
@@ -282,7 +293,7 @@
                     </div>
 
                     <!-- Judge Team Form -->
-                    <div class="container" v-if="['Judge Team'].includes(active_view)">
+                    <div class="container" v-if="['Judge Team', 'Edit Judge Team'].includes(active_view)">
                     
                         <div class="row justify-content-start">
                     
@@ -316,19 +327,19 @@
                     
                                     <h4 class="card-title mt-4">Catagory Scores</h4>
 
-                                    <label for="level_of_complexity_judge_input" class="form-label mt-3">Level of Complexity</label>
+                                    <label for="level_of_complexity_judge_input" class="form-label mt-3">Level of Complexity: {{level_of_complexity_judge_input}}</label>
                                     <input type="range" class="form-range" min="1" max="5" id="level_of_complexity_judge_input" v-model="level_of_complexity_judge_input">
 
-                                    <label for="uniquness_judge_input" class="form-label mt-3">Uniqueness</label>
+                                    <label for="uniquness_judge_input" class="form-label mt-3">Uniqueness: {{uniquness_judge_input}}</label>
                                     <input type="range" class="form-range" min="1" max="5" id="uniquness_judge_input" v-model="uniquness_judge_input">
 
-                                    <label for="commercial_viability_judge_input" class="form-label mt-3">Commercial Viability</label>
+                                    <label for="commercial_viability_judge_input" class="form-label mt-3">Commercial Viability: {{commercial_viability_judge_input}}</label>
                                     <input type="range" class="form-range" min="1" max="5" id="commercial_viability_judge_input" v-model="commercial_viability_judge_input">
 
-                                    <label for="aethetics_judge_input" class="form-label mt-3">Aethetics</label>
+                                    <label for="aethetics_judge_input" class="form-label mt-3">Aethetics: {{aethetics_judge_input}}</label>
                                     <input type="range" class="form-range" min="1" max="5" id="aethetics_judge_input" v-model="aethetics_judge_input">
 
-                                    <label for="completeness_judge_input" class="form-label mt-3">Completeness</label>
+                                    <label for="completeness_judge_input" class="form-label mt-3">Completeness: {{completeness_judge_input}}</label>
                                     <input type="range" class="form-range mb-3" min="1" max="5" id="completeness_judge_input" v-model="completeness_judge_input">
 
                     
@@ -341,7 +352,11 @@
                                     <h5 class="card-title mt-4">Constructive Criticisms</h5>
 
                                     <div class="form-floating m-3">
-                                        <button type="button" class="btn btn-primary m-3" v-on:click="submit_score()">Submit</button>
+                                        <button v-if="['Judge Team'].includes(active_view)" type="button" class="btn btn-primary m-3" v-on:click="submit_score()">Submit New Record</button>
+                                        <button v-if="['Edit Judge Team'].includes(active_view)" type="button" class="btn btn-primary m-3"
+                                            v-on:click="edit_judgement()">Submit Changes</button>
+                                        <button v-if="['Edit Judge Team'].includes(active_view)" type="button" class="btn btn-primary m-3"
+                                                v-on:click="delete_judgement()">Delete Record</button>
                                     </div>
                                     
                     
@@ -386,12 +401,18 @@
                                                                             <div class="d-flex justify-content-end">
                                                                                 <span v-for="team_member in team.team_members"
                                                                                     class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
-                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
-                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+
+                                                                                <button v-if="session_details.judge && !team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);change_view('Judge Team')">Judge Team</button>
+                                                                                
+                                                                                <button v-if="session_details.judge && team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);select_judgement(team);change_view('Edit Judge Team');">Edit Judgement</button>
+                                                                                
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="select_team(team);change_view('View Team');">View
                                                                                     Team</button>
+                                                                                
                                                                                 <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    v-on:click="select_team(team);change_view('Edit Team');create_spider_chart()">Edit
                                                                                     Team</button>
                                                                             </div>
                                                                         </div>
@@ -421,12 +442,17 @@
                                                                             <div class="d-flex justify-content-end">
                                                                                 <span v-for="team_member in team.team_members"
                                                                                     class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
-                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
-                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                <button v-if="session_details.judge && !team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);change_view('Judge Team')">Judge Team</button>
+                                                                                
+                                                                                <button v-if="session_details.judge && team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);select_judgement(team);change_view('Edit Judge Team');">Edit Judgement</button>
+                                                                                
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="select_team(team);change_view('View Team');">View
                                                                                     Team</button>
+                                                                                
                                                                                 <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    v-on:click="select_team(team);change_view('Edit Team');create_spider_chart()">Edit
                                                                                     Team</button>
                                                                             </div>
                                                                         </div>
@@ -455,12 +481,17 @@
                                                                             <div class="d-flex justify-content-end">
                                                                                 <span v-for="team_member in team.team_members"
                                                                                     class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
-                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
-                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                <button v-if="session_details.judge && !team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);change_view('Judge Team')">Judge Team</button>
+                                                                                
+                                                                                <button v-if="session_details.judge && team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);select_judgement(team);change_view('Edit Judge Team');">Edit Judgement</button>
+                                                                                
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="select_team(team);change_view('View Team');">View
                                                                                     Team</button>
+                                                                                
                                                                                 <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    v-on:click="select_team(team);change_view('Edit Team');create_spider_chart()">Edit
                                                                                     Team</button>
                                                                             </div>
                                                                         </div>
@@ -490,12 +521,17 @@
                                                                             <div class="d-flex justify-content-end">
                                                                                 <span v-for="team_member in team.team_members"
                                                                                     class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
-                                                                                <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
-                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                                <button v-if="session_details.judge && !team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);change_view('Judge Team')">Judge Team</button>
+                                                                                
+                                                                                <button v-if="session_details.judge && team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                    v-on:click="select_team(team);select_judgement(team);change_view('Edit Judge Team');">Edit Judgement</button>
+                                                                                
+                                                                                <button type="button" class="btn btn-primary mx-3" v-on:click="select_team(team);change_view('View Team');">View
                                                                                     Team</button>
+                                                                                
                                                                                 <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
-                                                                                    v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                    v-on:click="select_team(team);change_view('Edit Team');create_spider_chart()">Edit
                                                                                     Team</button>
                                                                             </div>
                                                                         </div>
@@ -525,12 +561,17 @@
                                                                             <h5 class="mb-1">{{team.team_name}}</h5>
                                                                             <div class="d-flex justify-content-end">
                                                                                 <span v-for="team_member in team.team_members" class="badge p-2 mx-2 text-bg-secondary d-flex align-items-center">{{team_member.first_name}}</span>
-                                                                            <button v-if="session_details.judge" type="button" class="btn btn-primary mx-3"
-                                                                                v-on:click="change_view('Judge Team');select_team(team)">Judge Team</button>
-                                                                            <button type="button" class="btn btn-primary mx-3" v-on:click="change_view('View Team');select_team(team)">View
+                                                                            <button v-if="session_details.judge && !team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                v-on:click="select_team(team);change_view('Judge Team')">Judge Team</button>
+                                                                            
+                                                                            <button v-if="session_details.judge && team.judged" type="button" class="btn btn-primary mx-3"
+                                                                                v-on:click="select_team(team);select_judgement(team);change_view('Edit Judge Team');">Edit Judgement</button>
+                                                                            
+                                                                            <button type="button" class="btn btn-primary mx-3" v-on:click="select_team(team);change_view('View Team');">View
                                                                                 Team</button>
+                                                                            
                                                                             <button v-if="session_details.attendant" type="button" class="btn btn-primary mx-3"
-                                                                                v-on:click="change_view('Edit Team');select_team(team);create_spider_chart()">Edit
+                                                                                v-on:click="select_team(team);change_view('Edit Team');create_spider_chart()">Edit
                                                                                 Team</button>
                                                                             </div>
                                                                         </div>
@@ -678,6 +719,7 @@
     integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
     crossorigin="anonymous"></script>
 <script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/vuex@4"></script>
 <script src="client.js"></script>
 <style>
     #app {

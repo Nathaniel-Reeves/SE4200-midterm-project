@@ -5,7 +5,7 @@ const { Team } = require('../models/team');
 const mongoose = require('../models/mongoose_conf');
 
 function judge_score_handlers(app) {
-    app.post('/team/:teamid/judge_score', async (req, res) => {
+    app.post('/teams/:teamid/judge_score', async (req, res) => {
         console.log(`POST /teams/${req.params.teamid}/judge_score`);
         console.log("BODY: ", req.body);
         user_helper.valid_user_roll(req, res, "judge").then(async flag => {
@@ -219,7 +219,7 @@ function judge_score_handlers(app) {
                         }
                     }, {new: true, runValidators: true}).exec();
                     console.log("Judge score record updated.");
-                    return res.status(200).send(JSON.stringify([{"message": "Judge score record updated.","status":"ok"}]));
+                    return res.status(201).send(JSON.stringify([{"message": "Judge score record updated.","status":"ok"}]));
                 } catch (error) {
                     console.log(error);
                     return res.status(500).send(JSON.stringify([{"message": "Something went wrong.","status":"error"}]));

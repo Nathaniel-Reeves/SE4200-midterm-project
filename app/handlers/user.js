@@ -20,8 +20,14 @@ function user_handlers(app) {
             await user.comparePassword(req.body.password, function(err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
+                    // Save user authentacated session state on the server
+                    session=req.session;
+                    session.userid=req.body.username;
                     req.session.loggedin = true;
                     req.session.userid = req.body.email;
+                    req.session.username = req.body.username;
+                    req.session.first_name = req.body.first_name;
+                    req.session.last_name = req.body.last_name;
                     console.log(user);
                     return res.status(200).send(user);
                 } else {
