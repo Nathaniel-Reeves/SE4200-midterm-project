@@ -42,7 +42,11 @@ If you would like to explore the app without creating an account, here are some 
 
 All user passwords are stored as encrypted hashes using bcrypt.
 
-## Submission Notes
+## UPDATE 3/10/2023 1:00 AM
+
+I fixed the judge actions we discussed I should fix at the end of my presentation.  A judge can now submit a record, delete records, and update records.
+
+## Submission Notes 3/9/2023 5:38 AM
 
 Unfortunately, I did not get this project finished as much as I'd like it to be.  The back end was completely done with solid validation for every input and great feedback for each output.  However, I did not leave enough time to complete the clint side of this project.  
 
