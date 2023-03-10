@@ -68,7 +68,9 @@ A list of ideas I wanted to implement but didn't get around to..
 I used Figma to create the wireframe and story board for this project. 
 Here is a link to the figma project page for your viewing.  I figured this would be easiest to do instead of a bunch of PDF files.
 
-https://www.figma.com/file/lhDovqDS1JVYKGXaRlAbHK/Code-Camp-Score-Tool?node-id=14%3A214&t=yTIbnXjVogmyr1Ly-1
+Figma Project: https://www.figma.com/file/lhDovqDS1JVYKGXaRlAbHK/Code-Camp-Score-Tool?node-id=14%3A214&t=yTIbnXjVogmyr1Ly-1
+
+Prototype: https://www.figma.com/proto/lhDovqDS1JVYKGXaRlAbHK/Code-Camp-Score-Tool?node-id=20%3A1047&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A2
 
 
 ## Data Resources
