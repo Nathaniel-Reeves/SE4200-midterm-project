@@ -4,7 +4,8 @@ function user_handlers(app) {
 
     app.get('/logout',(req,res) => {
         console.log("GET /logout");
-        req.session.destroy();
+        req.session.userid = null;
+        req.session.loggedin = false;
         res.redirect('/');
     });
 
@@ -15,21 +16,25 @@ function user_handlers(app) {
             const user = await model.User.findOne({ email: req.body.email }).exec();
             if (!user) {
                 console.log("User not found");
-                return res.status(404).send(JSON.stringify([{"message": "User not found.","status":"error"}]));
+                return res.status(401).send(JSON.stringify([{"message": "User not found.","status":"error"}]));
             }
             await user.comparePassword(req.body.password, function(err, isMatch) {
                 if (err) throw err;
                 if (isMatch) {
                     // Save user authentacated session state on the server
+                    // TODO: reconfigure the client to use the new session cookies properly 
                     session=req.session;
-                    session.userid=req.body.username;
+                    session.userid = user._id;
                     req.session.loggedin = true;
-                    req.session.userid = req.body.email;
-                    req.session.username = req.body.username;
-                    req.session.first_name = req.body.first_name;
-                    req.session.last_name = req.body.last_name;
-                    console.log(user);
-                    return res.status(200).send(user);
+                    req.session.userid = user._id;
+                    req.session.email = user.email;
+                    req.session.first_name = user.first_name;
+                    req.session.last_name = user.last_name;
+                    req.session.admin = user.admin;
+                    req.session.contestant = user.contestant;
+                    req.session.judge = user.judge;
+                    req.session.attendant = user.attendant;
+                    return res.status(201).send(user);
                 } else {
                     console.log("Invalid password");
                     return res.status(401).send(JSON.stringify([{"message": "Wrong password.","status":"error"}]));
@@ -39,6 +44,15 @@ function user_handlers(app) {
             res.status(500).send(err);
             throw err;
         }
+    });
+
+    app.get('/login', async (req, res) => {
+        // TODO: document this function and call it on the client.
+        console.log("GET /login");
+        if (req.session.loggedin) {
+            return res.redirect('/');
+        }
+        
     });
 
     app.post('/register', async (req, res) => {
@@ -68,7 +82,8 @@ function user_handlers(app) {
         }
     });
 
-    app.put('/toggle-user-roll/:userid', async (req, res) => {
+    // TODO: refigure the authorizeRequest middleware function to with this this function and all other functions
+    app.put('/toggle-user-roll/:userid', authorizeRequest, async (req, res) => {
         console.log("PUT /toggle-user-roll");
         console.log("BODY: ", req.body);
         valid_user_roll(req, res, "admin").then(flag => {

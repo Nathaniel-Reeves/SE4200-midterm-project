@@ -138,6 +138,7 @@ const app = Vue.createApp({
             }
             fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
                 method: 'POST',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -196,6 +197,7 @@ const app = Vue.createApp({
             }
             fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
                 method: 'PUT',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -218,7 +220,8 @@ const app = Vue.createApp({
             this.validation_errors = [];
             this.success_messages = [];
             fetch(this.origin + '/teams/' + this.team_selected._id + '/judge_score', {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: "include"
             }).then(response => {
                 console.log(response);
                 if (response.status === 200) {
@@ -327,6 +330,7 @@ const app = Vue.createApp({
             this.success_messages = [];
             fetch(window.location.origin + "/login", {
                 method: 'POST',
+                credentials: "include",
                 body: JSON.stringify({
                     email: this.email,
                     password: this.password
@@ -364,7 +368,8 @@ const app = Vue.createApp({
             this.validation_errors = [];
             this.success_messages = [];
             fetch(window.location.origin + "/logout", {
-                method: 'GET'
+                method: 'GET',
+                credentials: "include",
             }).then(response => {
                 if (response.status == 200) {
                     this.session_details = {
@@ -404,6 +409,7 @@ const app = Vue.createApp({
             } else {
                 fetch(window.location.origin + "/register", {
                     method: 'POST',
+                    credentials: "include",
                     body: JSON.stringify({
                         first_name: this.register_first_name,
                         last_name: this.register_last_name,
@@ -465,6 +471,7 @@ const app = Vue.createApp({
             if (filter == "all") {
                 fetch(window.location.origin + "/teams", {
                     method: 'GET',
+                    credentials: "include",
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -483,6 +490,7 @@ const app = Vue.createApp({
             } else {
                 fetch(window.location.origin + "/teams?catagory=" + filter, {
                     method: 'GET',
+                    credentials: "include",
                     headers: {
                         'Content-Type': 'application/json'
                     }
