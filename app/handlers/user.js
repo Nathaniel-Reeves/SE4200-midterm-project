@@ -2,6 +2,28 @@ const model = require('../models/user');
 
 function user_handlers(app) {
 
+    // First order function, function that builds functions
+    // Notes from Class - User must be administrator
+    function authorizeRequest(adminOnly) {
+        return function () {
+            if (req.session && req.session.userId) {
+                model.User.findeOne({_id: req.session.userId}).then(function (user) {
+                    if (user && user.admin || user && !adminOnly) {
+                        req.user = user;
+                        next();
+                    } else {
+                        res.status(401).send("Unauthenticated");
+                    }
+                });
+            } else {
+                res.status(401).send("Unathenticated");
+            }
+        };
+    }
+
+    // example
+    // app.get('/foods', autorizeRequest(false), function (req, res) ...
+
     app.get('/logout',(req,res) => {
         console.log("GET /logout");
         req.session.userid = null;
@@ -53,6 +75,18 @@ function user_handlers(app) {
             return res.redirect('/');
         }
         
+    });
+
+    app.get('/session',authorizeRequest, function (req, res) {
+        // TODO: Convert login to session, use this function to check if the user is logged in for each page load
+        console.log("The current session data:", req.session);
+        res.json(req.user);
+    });
+
+    app.delete("/session", authorizeRequest, function (req, res) {
+        // TODO: call this function from the client to log out.  Document this code.
+        req.session.userId = undefined;
+        res.status(204).send("Logged Out");
     });
 
     app.post('/register', async (req, res) => {
