@@ -21,7 +21,13 @@ app.use(cookieParser());
 
 // tack on middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    credentials: true,
+    origin: function (origin, callback) {
+        // Dynamic Cors Origin Setter
+        callback(null, origin);  
+    }
+}));
 
 // custom authorizedRequest middleware function called by
 // express for each request recived.
