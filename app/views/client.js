@@ -328,7 +328,8 @@ const app = Vue.createApp({
         login: function () {
             this.validation_errors = [];
             this.success_messages = [];
-            fetch(window.location.origin + "/login", {
+            console.log(window.location.origin);
+            fetch(window.location.origin + "/session", {
                 method: 'POST',
                 credentials: "include",
                 body: JSON.stringify({
@@ -367,8 +368,8 @@ const app = Vue.createApp({
         logout: function () {
             this.validation_errors = [];
             this.success_messages = [];
-            fetch(window.location.origin + "/logout", {
-                method: 'GET',
+            fetch(window.location.origin + "/session", {
+                method: 'DELETE',
                 credentials: "include",
             }).then(response => {
                 if (response.status == 200) {
@@ -396,6 +397,25 @@ const app = Vue.createApp({
                     console.log(data);
                     this.validation_errors = data;
                 });
+            });
+        },
+        get_session: function () {
+            fetch(window.location.origin + "/session", {
+                method: 'GET',
+                credentials: "include"
+            }).then(response => {
+                console.log(response);
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        console.log(data);
+                        this.session_details = data;
+                    });
+                } else {
+                    response.json().then(data => {
+                        console.log(data);
+                        this.validation_errors = data;
+                    });
+                }
             });
         },
         register: function () {
@@ -559,6 +579,7 @@ const app = Vue.createApp({
     },
     created: function () {
         this.get_teams("all");
+        this.get_session();
         this.nav_items = this.default_nav_items;
         this.logged_in_menus();
     }

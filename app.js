@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const session = require('express-session');
 const cors = require('cors');
 
+const User = require('./app/models/user');
+
 app = express();
 
 const { ConnectionClosedEvent } = require('mongodb');
@@ -32,19 +34,21 @@ app.use(cors({
 // custom authorizedRequest middleware function called by
 // express for each request recived.
 function authorizeRequest(req, res, next) {
-    if (req.session && req.session.userid){
-        //TODO: query the user in the database and check if they exsist
-        if (user) {
-            // forward the results from the database query to the request
-            req.user = user;
-            next();
-        } else {
-            res.status(401).send("Unauthenticated");
-        }  
+    if (req.session && req.session.userid) {
+        User.findeOne({_id: req.session.userId}).then(function (user) {
+            if (user) {
+                // forward the results from the database query to the request
+                req.user = user;
+                next();
+            } else {
+                res.status(401).send("Unauthenticated");
+            }  
+        });
     } else {
         res.status(401).send("Unauthenticated");
     }
 }
+
 
 app.get('/', (req, res) => {
     console.log(session);
@@ -53,9 +57,9 @@ app.get('/', (req, res) => {
     res.render('index.html');
 });
 
-require('./handlers/user').user_handlers(app);
-require('./handlers/judge_score').judge_score_handlers(app);
-require('./handlers/team').team_handlers(app);
+require('./app/handlers/user').user_handlers(app);
+require('./app/handlers/judge_score').judge_score_handlers(app);
+require('./app/handlers/team').team_handlers(app);
 
 app.listen(port, function () {
     console.log(`Codecamp app listening on port ${port}!`);

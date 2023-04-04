@@ -240,19 +240,20 @@ All data resources send and recive json requests only.
 |-|-|-|
 |Users|
 |-|-|-|
-|GET|/logout|Logout User. (In hignsight, I probably should have used DELETE for this).|
-|POST|/login|Login in User with email and password.|
+|DELETE|/session|Logout User.|
+|POST|/session|Login in User with email and password.|
+|GET|/session|Get session data.|
 |POST|/register|Creates a new user with email, first and last name, and password.|
 |PUT|/toggle-user-roll/{:user_id}|This would only be accessible by users with admin privileges.  This allows the admin user to change the rolls of other users from contestants to judges to attendants|
 |-|-|-|
 |Teams|
 |-|-|-|
-|POST|/Teams|Creates a new Team, attendants or admins can do this.  Takes a team_name, team_division, and catagory variables.|
+|POST|/teams|Creates a new Team, attendants or admins can do this.  Takes a team_name, team_division, and catagory variables.|
 |POST|/teams/{team_id}/users/ | Adds a user to a team, attendants and admins can do this.  sends a single user id.
 |DELETE| /teams/{team_id}/users/ | Removes a user from a team.  Again, only admins and attendants can preform this action. |
 |PUT| /teams/{team_id}/ | Allows admins and attendants to change team attributes such as the name, division, and catagory variables|
 |DELETE| /teams/{team_id}/ | Deletes an entire team. Only admins and attendents can do this.|
-|GET| /teams/ | Returns all teams with all user and judge_score information populated in one bulk response |
+|GET| /teams/ | Returns all teams with all user and judge_score information populated in one bulk response excluding emails and encrypted passwords. |
 |-|-|-|
 |JudgeScore|
 |-|-|-|
