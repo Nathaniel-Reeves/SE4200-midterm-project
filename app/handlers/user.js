@@ -61,7 +61,7 @@ function user_handlers(app) {
     app.get('/session', function (req, res) {
         console.log("GET - /session");
         console.log("The current session data:", req.session);
-        res.json(req.session);
+        res.status(200).json(req.session);
     });
 
     app.delete("/session", authorizeSession(), function (req, res) {

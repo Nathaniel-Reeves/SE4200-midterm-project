@@ -341,7 +341,7 @@ const app = Vue.createApp({
                 }
             }).then(response => {
                 console.log(response);
-                if (response.status == 200) {
+                if (response.status == 201) {
                     response.json().then(data => {
                         this.session_details = data;
                         this.session_details.logged_in = true;
@@ -364,6 +364,7 @@ const app = Vue.createApp({
                     this.validation_errors = data;
                 });
             });
+            this.get_session();
         },
         logout: function () {
             this.validation_errors = [];
@@ -372,7 +373,7 @@ const app = Vue.createApp({
                 method: 'DELETE',
                 credentials: "include",
             }).then(response => {
-                if (response.status == 200) {
+                if (response.status == 204) {
                     this.session_details = {
                         _id: "",
                         first_name: '',
@@ -386,6 +387,7 @@ const app = Vue.createApp({
                     }
                     this.get_teams("all");
                     this.nav_items = this.default_nav_items;
+                    this.change_view('Home');
                 } else {
                     response.json().then(data => {
                         console.log(data);
@@ -407,8 +409,26 @@ const app = Vue.createApp({
                 console.log(response);
                 if (response.status === 200) {
                     response.json().then(data => {
-                        console.log(data);
-                        this.session_details = data;
+                        if (data.user) {
+                            data.user.logged_in = true;
+                            this.session_details = data.user;
+                            this.nav_items = this.default_nav_items;
+                            this.logged_in_menus();
+                        } else {
+                            this.session_details = {
+                                _id: "",
+                                first_name: '',
+                                last_name: '',
+                                email: '',
+                                logged_in: false,
+                                contestant: false,
+                                judge: false,
+                                attendant: false,
+                                admin: false
+                            }
+                            this.nav_items = this.default_nav_items;
+                            this.logged_in_menus();
+                        }
                     });
                 } else {
                     response.json().then(data => {
@@ -578,8 +598,8 @@ const app = Vue.createApp({
         }
     },
     created: function () {
-        this.get_teams("all");
         this.get_session();
+        this.get_teams("all");
         this.nav_items = this.default_nav_items;
         this.logged_in_menus();
     }
