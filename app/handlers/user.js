@@ -91,7 +91,7 @@ function user_handlers(app) {
             }
             if (error.code === 11000) {
                 // User already exists
-                return res.status(401).send(JSON.stringify([{"message":"User already exists.","status":"error"}]));
+                return res.status(401).send(JSON.stringify([{"message":"Invalid User.","status":"error"}]));
             }
             console.log("Something went wrong.")
             return res.status(500).send(JSON.stringify([{"message":"Something went wrong.","status":"error"}]));
