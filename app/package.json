@@ -20,7 +20,8 @@
     "mongoose": "^7.0.0",
     "n": "^9.0.1",
     "stable": "^0.1.8",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "ws": "^8.13.0"
   },
   "description": ""
 }
