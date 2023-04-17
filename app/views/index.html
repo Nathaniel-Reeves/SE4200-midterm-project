@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="static/styles.css" type="text/css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +9,7 @@
         rel="stylesheet" 
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
         crossorigin="anonymous">
+
 </head>
 
 <body style="padding-top: 16px;" class="bg-dark" data-bs-theme="dark">
@@ -88,7 +88,7 @@
                                     <p>Countdown</p>
                                 </div>
                                 <div>
-                                    <h2>24:00:00</h2>
+                                    <h2>{{ countdown_string }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -106,73 +106,10 @@
                     </div>
 
                     <div class="my-3 .d-sm-none .d-md-block">
-                        <div id="carouselExampleAutoplaying" class="carousel-fade" data-bs-ride="carousel" data-bs-touch="false">
+                        <div class="carousel-fade" data-ride="carousel" data-bs-touch="false" data-interval="false">
                             <div class="carousel-inner">
-                                <div class="carousel-item active" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/audience-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/busybusy-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/corso-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/denton-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/dixietech-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/eaglegate-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/infowest-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/intergalactic-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/mango-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/reidashman-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/scitools-1.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/sga-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/smartcare-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/stg-chamber-300x300-1-200x200.jpg" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/tcn.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/techridge-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/usu_roi_logo-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/Utah4H-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/utahtech-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/vasion_logo-200x200.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/washco.png" class="img-thumbnail p-3 bg-white">
-                                </div>
-                                <div class="carousel-item" data-bs-interval="50000">
-                                    <img src="static/images/codecamp_sponsors/zonos-300x300-1-200x200.png" class="img-thumbnail p-3 bg-white">
+                                <div v-for="slide in slide_show" class="carousel-item" :class="{active: slide.active}">
+                                    <img class="img-thumbnail p-3 bg-white" v-bind:src="slide.content.image">
                                 </div>
                             </div>
                         </div>
@@ -591,45 +528,74 @@
 
                     </div>
 
-                </div>
+                    <!-- Admin Console -->
+                    <div v-if="['Admin Console'].includes(active_view)">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-tilte">Admin Consle</h2>
+                                <div class="d-flex flex-column align-items-start">
+                                    <h3 class="my-3">Countdown Timer Settings</h3>
+                                    <div>
+                                        <form class="d-flex flex-row text-nowrap align-items-baseline">
+                                            <label for="countdown_target" class="form-label">Countdown To:</label>
+                                            <input v-model="countdown_input" id="countdown_target" type="datetime-local" name="datetime" class="form-control">
+                                            <button v-on:click="update_countdown()" type="button" class="btn btn-primary mx-3">Update Countdown</button>
+                                        </form>
+                                    </div>
 
-                <!-- Admin Console -->
-                <div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-tilte">Admin Consle</h2>
-                            <div class="d-flex flex-column align-items-start">
-                                <div>
-                                    <h3>Countdown Timer Settings</h3>
-                                    <div class="input-group md-3">
-                                        <div style="overflow:hidden;">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div id="datetimepicker12"></div>
-                                                    </div>
+                                    <h3 class="my-3">Slideshow Settings</h3>
+                                    <div class="m-3 flex-d flex-row"> 
+                                        <div>
+                                            <h4>Timing</h4>
+                                            <label for="slide_speed" class="form-label mt-3">Slide Speed: 
+                                                {{slide_speed}}</label>
+                                            <input type="range" class="form-range" min="1" max="5" id="slide_speed"
+                                                v-model="slide_speed" @click="change_slide_speed()">
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary mx-3" @click="toggle_play_pause()" v-if="slide_show_paused">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill"
+                                                    viewBox="0 0 16 16">
+                                                    <path
+                                                        d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-secondary mx-3" @click="toggle_play_pause()" v-else>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause-fill"
+                                                    viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <h4 class="card-title">Live Slides</h4>
+                                            <div style="max-height: 400px" class="flex-d flex-row flex-wrap justify-content-start drop-zone overflow-auto card" @drop="onDrop($event, 1)" @dragover.prevent
+                                                @dragenter.prevent>
+                                                <div v-for="slide in listOne" :key="slide.id" class="drag-el card m-2 align-content-center justify-content-center" draggable="true"
+                                                    @dragstart="startDrag($event, slide)">
+                                                    <img class="img-thumbnail p-3 bg-white border-4" v-bind:src="slide.content.image" :class="{active_slide: slide.active}">
                                                 </div>
                                             </div>
-                                            <script type="text/javascript">
-                                                $(function () {
-                                                    $('#datetimepicker12').datetimepicker({
-                                                        inline: true,
-                                                        sideBySide: true
-                                                    });
-                                                });
-                                            </script>
+                                        </div>
+                                        <div>
+                                            <h4 class="card-title">Hidden Slides</h4>
+                                            <div style="max-height: 400px" class="flex-d flex-row flex-wrap justify-content-start drop-zone overflow-auto card" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
+                                                <div v-for="slide in listTwo" :key="slide.id" class="drag-el card m-2 align-content-center justify-content-center" draggable="true"
+                                                    @dragstart="startDrag($event, slide)">
+                                                    <img class="img-thumbnail p-3 bg-white border-4" v-bind:src="slide.content.image" :class="{active_slide: slide.active}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <h3>Slides Settings</h3>
-                                </div>
-                                <div>
-                                    <h3>Member Account Settings</h3>
+
+                                    <h3 class="my-3">Member Account Settings</h3>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Sponsors -->
@@ -749,16 +715,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
     crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
     integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
     crossorigin="anonymous"></script>
-<script src="https://unpkg.com/vue@3"></script>
-<script src="https://unpkg.com/vuex@4"></script>
+
+<script  src="https://unpkg.com/vue@3"></script><!-- Vue.js is required -->
+
+
+<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+<script src="//cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
+<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/4.0.0/vuedraggable.umd.min.js"></script>
+
+
 <script src="client.js"></script>
 <style>
     #app {
@@ -770,6 +743,24 @@
         margin-top: 60px;
     }
 
-    @import'~bootstrap/css/bootstrap.css'
+    .active_slide {
+        border-color: orangered;
+    }
+
+
+</style>
+
+<style scoped>
+    .drop-zone {
+        background-color: #2b2b2b;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    .drag-el {
+        background-color: #2c3e50;
+        margin-bottom: 10px;
+        padding: 0px;
+    }
 </style>
 </html>

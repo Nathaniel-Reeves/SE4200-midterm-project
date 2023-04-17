@@ -1,3 +1,4 @@
+const WebSocket = require('ws');
 const express = require('express');
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
@@ -10,9 +11,9 @@ app = express();
 const { ConnectionClosedEvent } = require('mongodb');
 
 const port = process.env.PORT || 8080;
+app.use(express.static(__dirname+'/views'));
 
 // Setup sessions
-app.use(express.static(__dirname+'/views'));
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(session({
     secret: "akS:LGjja;g:LSg*098a09sDSG)(DfSDG)*(dfASGaspdofSD)G98DF*GSD^G&^$%SdgSD#g$%^DS47g56SDgasd",
@@ -63,4 +64,16 @@ require('./app/handlers/team').team_handlers(app);
 
 app.listen(port, function () {
     console.log(`Codecamp app listening on port ${port}!`);
+});
+
+const wss = new WebSocket.Server({server: app});
+
+wss.on('connection', function connection(wsclient) {
+    wsclient.on('message', function (data) {
+        wss.clients.forEach(function (client) {
+            if (client.readyState == WebSocket.OPEN && client != wsclient) {
+                client.send(data, {binary: false });
+            }
+        });
+    });
 });

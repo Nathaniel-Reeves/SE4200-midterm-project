@@ -14,7 +14,7 @@ const server = app.listen(port, function() {
     console.log(`Server is listening on port ${port}`);
 });
 
-const wss = new WebSocket.Server({port: 8080});
+const wss = new WebSocket.Server({server: app});
 
 wss.on('connection', function connection(wsclient) {
     wsclient.on('message', function (data) {
