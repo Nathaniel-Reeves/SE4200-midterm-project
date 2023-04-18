@@ -43,11 +43,11 @@ require('./handlers/user').user_handlers(app);
 require('./handlers/judge_score').judge_score_handlers(app);
 require('./handlers/team').team_handlers(app);
 
-app.listen(port, function () {
+var server = app.listen(port, '0.0.0.0', function () {
     console.log(`Codecamp app listening on port ${port}!`);
 });
 
-const wss = new WebSocket.Server({ server:app });
+const wss = new WebSocket.Server({ server:server });
 
 // Handle WebSocket connection
 wss.on('connection', function connection(wsclient) {
