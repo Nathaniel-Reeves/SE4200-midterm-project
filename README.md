@@ -2,7 +2,7 @@
 Web II midterm project.  A simple web app to help teams and judges at codecamp.
 
 Here is the deployed application link:
-http://codecamp.us-east-1.elasticbeanstalk.com/
+http://codecamp2.us-east-1.elasticbeanstalk.com/
 
 If you would like to explore the app without creating an account, here are some credentials you can use.
 

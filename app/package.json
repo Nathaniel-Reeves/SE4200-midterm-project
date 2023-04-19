@@ -1,6 +1,10 @@
 {
   "name": "se4200-midterm-project",
-  "version": "1.0.0",
+  "engines": {
+    "npm": ">=8.0.0 <9.0.0",
+    "node": ">=18.0.0 <19.0.0"
+  },
+  "version": "2.2.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +22,7 @@
     "express-session": "^1.17.3",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.0",
-    "n": "^9.0.1",
+    "n": "^9.1.0",
     "stable": "^0.1.8",
     "validator": "^13.9.0",
     "ws": "^8.13.0"
