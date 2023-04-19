@@ -45,7 +45,7 @@
             </div>
         </nav>
 
-        <div class="container card px-0" v-if="!['Login','Register'].includes(active_view)">
+        <div class="container card px-0" v-if="!['Login','Register','Slideshow'].includes(active_view)">
             <div class="row p-0">
                 <img class="img-fluid rounded" src="static/images/hero.jpg">
             </div>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="container bg-dark text-white py-4 px-0" v-if="!['Login','Register'].includes(active_view)">
+        <div class="container bg-dark text-white py-4 px-0" v-if="!['Login','Register','Slideshow'].includes(active_view)">
             <div class="row gap-3">
                 <div class="col-3" style="width:250px">
 
@@ -108,7 +108,7 @@
                     <div class="my-3 .d-sm-none .d-md-block">
                         <div class="carousel-fade" data-ride="carousel" data-bs-touch="false" data-interval="false">
                             <div class="carousel-inner">
-                                <div v-for="slide in slide_show" class="carousel-item" :class="{active: slide.active}">
+                                <div v-for="slide in socket_message.slide_show" class="carousel-item" :class="{active: slide.active}">
                                     <img class="img-thumbnail p-3 bg-white" v-bind:src="slide.content.image">
                                 </div>
                             </div>
@@ -537,8 +537,8 @@
                                     <h3 class="my-3">Countdown Timer Settings</h3>
                                     <div>
                                         <form class="d-flex flex-row text-nowrap align-items-baseline">
-                                            <label for="countdown_target" class="form-label">Countdown To:</label>
-                                            <input v-model="countdown_input" id="countdown_target" type="datetime-local" name="datetime" class="form-control">
+                                            <label for="countdown_input" class="form-label">Countdown To:</label>
+                                            <input v-model="socket_message.countdown_input" id="countdown_input" type="datetime-local" name="datetime" class="form-control">
                                             <button v-on:click="update_countdown()" type="button" class="btn btn-primary mx-3">Update Countdown</button>
                                         </form>
                                     </div>
@@ -548,12 +548,12 @@
                                         <div>
                                             <h4>Timing</h4>
                                             <label for="slide_speed" class="form-label mt-3">Slide Speed: 
-                                                {{slide_speed}}</label>
+                                                {{slide_speed_input}}</label>
                                             <input type="range" class="form-range" min="1" max="5" id="slide_speed"
-                                                v-model="slide_speed" @click="change_slide_speed()">
+                                                v-model="slide_speed_input" @click="change_slide_speed()">
                                         </div>
                                         <div class="mb-3">
-                                            <button class="btn btn-primary mx-3" @click="toggle_play_pause()" v-if="slide_show_paused">
+                                            <button class="btn btn-primary mx-3" @click="toggle_play_pause()" v-if="socket_message.slide_show_paused">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill"
                                                     viewBox="0 0 16 16">
                                                     <path
@@ -599,7 +599,7 @@
                 </div>
 
                 <!-- Sponsors -->
-                <div v-if="!['Login','Register'].includes(active_view)">
+                <div v-if="!['Login','Register','Slideshow'].includes(active_view)">
                     <div class="card">
                         <div class="card-body">
                             <h2 class="card-title">Thank our generous sponsors!</h2>
@@ -708,6 +708,18 @@
                 </div>
             </form>
         </div>
+
+        <!-- Fullscreen Slides -->
+        <div class="p-5 bg-white" v-if="['Slideshow'].includes(active_view)">
+            <div class="carousel-fade" data-ride="carousel" data-bs-touch="false" data-interval="false">
+                <div class="carousel-inner">
+                    <div v-for="slide in socket_message.slide_show" class="carousel-item" :class="{active: slide.active}">
+                        <img style="width:50%;" class="img bg-white" v-bind:src="slide.content.image">
+                    </div>
+                </div>
+            </div>
+            <h2 class="card-title fs-1 fw-bold text-black-50">{{ countdown_string }}</h2>
+        </div>
     </div>
 </body>
 
@@ -725,11 +737,6 @@
 
 <script  src="https://unpkg.com/vue@3"></script><!-- Vue.js is required -->
 
-
-<!-- CDNJS :: Sortable (https://cdnjs.com/) -->
-<script src="//cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
-<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/4.0.0/vuedraggable.umd.min.js"></script>
 
 
 <script src="client.js"></script>

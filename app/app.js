@@ -3,8 +3,9 @@ const express = require('express');
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
 const cors = require('cors');
+const fs = require('fs');
 
-const User = require('./models/user');
+const model = require('./models/user');
 
 app = express();
 
@@ -49,25 +50,78 @@ var server = app.listen(port, '0.0.0.0', function () {
 
 const wss = new WebSocket.Server({ server:server });
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+
+websocket_clients = {};
 // Handle WebSocket connection
 wss.on('connection', function connection(wsclient) {
 
-    console.log("Socket Client Connected")
-    console.log(wsclient);
+    // Assign wsclient a unique id
+    console.log("Socket Client Connected");
+    wsclient.ws_id = uuidv4();
+    websocket_clients[wsclient.ws_id] = "";
+
+    // Load data from codecamp.json and send data
+    var codecamp_file = fs.readFileSync('./codecamp.json');
+    var codecamp_data = JSON.parse(codecamp_file);
+    wsclient.send(JSON.stringify(codecamp_data), {binary: false });
 
     // Handle WebSocket messages
-    wsclient.on('message', function (data) {
+    wsclient.on('message', function (raw_data) {
+        data = JSON.parse(raw_data);
 
-        // Send a response back to all clients
-        wss.clients.forEach(function (client) {
-            if (client.readyState == WebSocket.OPEN) {
-                client.send(data, {binary: false });
-            }
-        });
+        // Check if user is authenticated
+        if (data.user_id == "") {
+            console.log(`Unauthenticated user`);
+        } else {
+            var flag = false;
+            model.User.findOne({_id: data.user_id}).then(function (user) {
+                if (!user) {
+                    console.log(`Unauthenticated user`);
+                    flag = true;
+                } else {
+                    websocket_clients[data.ws_id] = user._id;
+                    console.log(`User ${data.user_id} connected`);
+                }
+                if (!user["admin"]) {
+                    console.log(`Unauthorized user, requires admin`);
+                    flag = true;
+                } else {
+                    console.log(`User ${data.user_id} is a admin`);
+                }
+
+                // User is admin, Make changes and update all sockets
+                if (!flag) {
+                    // Save new data to codecamp.json and send new data
+                    data.user_id = "";
+                    data.ws_id = "";
+                    fs.writeFile('./codecamp.json', JSON.stringify(data), function(err) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("Data Saved");
+                        }
+                    });
+
+                    // Send a response back to all clients
+                    wss.clients.forEach(function (client) {
+                        if (client.readyState == WebSocket.OPEN) {
+                            client.send(JSON.stringify(data), {binary: false });
+                        }
+                    });
+                }
+            });
+        }
     });
 
     // Handle WebSocket disconnections
-    wsclient.on('disconnect', () => {
+    wsclient.on('close', () => {
         console.log('WebSocket client disconnected');
     });
 });
