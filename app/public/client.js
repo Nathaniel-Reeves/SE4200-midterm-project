@@ -112,7 +112,6 @@ const app = Vue.createApp({
         },
         handleMessageFromSocket: function (data) {
             var decoded_data = JSON.parse(data);
-            console.log("Socket Data:", decoded_data);
             this.socket_message = decoded_data;
 
             // Start Count Down
@@ -240,7 +239,6 @@ const app = Vue.createApp({
                 },
                 body: JSON.stringify(data)
             }).then(response => {
-                console.log(response);
                 if (response.status === 201) {
                     response.json().then(data => {
                         this.success_messages = data;
@@ -299,7 +297,6 @@ const app = Vue.createApp({
                 },
                 body: JSON.stringify(data)
             }).then(response => {
-                console.log(response);
                 if (response.status === 201) {
                     response.json().then(data => {
                         this.success_messages = data;
@@ -319,7 +316,6 @@ const app = Vue.createApp({
                 method: 'DELETE',
                 credentials: "include"
             }).then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     response.json().then(data => {
                         this.success_messages = data;
@@ -336,7 +332,6 @@ const app = Vue.createApp({
         select_team: function (team) {
             this.validation_errors = [];
             this.success_messages = [];
-            console.log("Select Team: " + team);
 
             function format_string(str) {
                 var new_str = str.toLowerCase()
@@ -357,7 +352,6 @@ const app = Vue.createApp({
             var total_aethetic_score = 0;
             var total_completeness_score = 0;
             for (i in team.judge_scores) {
-                console.log(i);
                 for (j in team.judge_scores[i].criticisms) {
                     total_criticisms.push(team.judge_scores[i].criticisms[j]);
                 }
@@ -424,7 +418,6 @@ const app = Vue.createApp({
         login: function () {
             this.validation_errors = [];
             this.success_messages = [];
-            console.log(window.location.origin);
             fetch(window.location.origin + "/session", {
                 method: 'POST',
                 credentials: "include",
@@ -436,7 +429,6 @@ const app = Vue.createApp({
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                console.log(response);
                 if (response.status == 201) {
                     response.json().then(data => {
                         this.session_details = data;
@@ -444,20 +436,17 @@ const app = Vue.createApp({
                         this.email = "";
                         this.password = "";
                         this.logged_in_menus();
-                        console.log(this.session_details);
                         this.authenticate_ws();
                         this.get_teams("all");
                         this.change_view('Home');
                     });
                 } else {
                     response.json().then(data => {
-                        console.log(data);
                         this.validation_errors = data;
                     });
                 }
             }).catch(error => {
                 response.json().then(data => {
-                    console.log(data);
                     this.validation_errors = data;
                 });
             });
@@ -487,13 +476,11 @@ const app = Vue.createApp({
                     this.change_view('Home');
                 } else {
                     response.json().then(data => {
-                        console.log(data);
                         this.validation_errors = data;
                     });
                 }
             }).catch(error => {
                 response.json().then(data => {
-                    console.log(data);
                     this.validation_errors = data;
                 });
             });
@@ -503,7 +490,6 @@ const app = Vue.createApp({
                 method: 'GET',
                 credentials: "include"
             }).then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     response.json().then(data => {
                         if (data.user) {
@@ -530,14 +516,12 @@ const app = Vue.createApp({
                     });
                 } else {
                     response.json().then(data => {
-                        console.log(data);
                         this.validation_errors = data;
                     });
                 }
             });
         },
         authenticate_ws: function () {
-            console.log("Authenticate WS");
             this.socket_message.user_id = this.session_details._id;
             this.sendMessageToSocket();
         },
@@ -576,14 +560,11 @@ const app = Vue.createApp({
                         this.register_password_confirmation = "";
                     } else {
                         response.json().then(data => {
-                            console.log(data);
                             this.validation_errors = data;
                         });
                     }
                 }).catch(error => {
-                    console.log(error);
                     response.json().then(data => {
-                        console.log(data);
                         this.validation_errors = data;
                     });
                 });
@@ -621,12 +602,10 @@ const app = Vue.createApp({
                 }).then(response => {
                     if (response.status == 200) {
                         response.json().then(data => {
-                            console.log("DATA: ", data);
                             this.teams = data;
                             for (i in this.teams) {
                                 this.teams[i].judged = this.check_judgement_on_team(this.teams[i]);
                             }
-                            console.log("CHECKED: ", this.teams);
                         });
                     }
                 });
@@ -640,12 +619,10 @@ const app = Vue.createApp({
                 }).then(response => {
                     if (response.status == 200) {
                         response.json().then(data => {
-                            console.log("DATA: ", data);
                             this.teams = data;
                             for (i in this.teams) {
                                 this.teams[i].judged = this.check_judgement_on_team(this.teams[i]);
                             }
-                            console.log("CHECKED: ", this.teams);
                         });
                     }
                 });
