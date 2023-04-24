@@ -12,7 +12,7 @@ app = express();
 const { ConnectionClosedEvent } = require('mongodb');
 
 const port = process.env.PORT || 8080;
-app.use(express.static(__dirname+'/views'));
+app.use(express.static(__dirname+'/public'));
 
 // Setup sessions
 const oneDay = 1000 * 60 * 60 * 24;
