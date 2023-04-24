@@ -104,29 +104,6 @@ const app = Vue.createApp({
             item.list = list
             this.sendMessageToSocket();
         },
-        change_slide: function () {
-            var flag = false;
-            var flag2 = false;
-            var counter = 0;
-            while (true) {
-                for (i in this.socket_message.slide_show) {
-                    if (this.socket_message.slide_show[i].active) {
-                        flag = true;
-                        this.socket_message.slide_show[i].active = false;
-                        continue;
-                    }
-                    if (flag && this.socket_message.slide_show[i].list === 1) {
-                        flag2 = true;
-                        this.socket_message.slide_show[i].active = true;
-                        break;
-                    }
-                }
-                if (flag && flag2 || counter == 1) {
-                    break;
-                }
-                counter += 1;
-            }
-        },
         connectSocket: function () {
             this.socket = new WebSocket("ws://"+window.location.host);
             this.socket.onmessage = (event) => {
@@ -147,7 +124,6 @@ const app = Vue.createApp({
             // Start Slideshow
             this.slide_speed_input = this.socket_message.slide_speed;
             this.change_slide_speed();
-            this.start_slideshow();
         },
         sendMessageToSocket: function () {
             this.socket_message.user_id = this.session_details._id;
@@ -206,8 +182,8 @@ const app = Vue.createApp({
         },
         update_countdown: function () {
             this.socket_message.countdown_target = this.socket_message.countdown_input;
-            this.countdown_func();
             this.sendMessageToSocket();
+            this.countdown_func();
         },
         countdown_func: function () {
             // Convert targetDatetime to a Unix timestamp (in seconds)
@@ -709,22 +685,12 @@ const app = Vue.createApp({
             //     });
             // }
         },
-        start_slideshow: function () {
-            this.slide_clock = setInterval(() => {
-            if (!this.socket_message.slide_show_paused) {
-                this.change_slide();
-                }
-            }, this.socket_message.slide_interval);
-        },
         toggle_play_pause: function () {
             this.socket_message.slide_show_paused =! this.socket_message.slide_show_paused;
             this.sendMessageToSocket();
         },
         change_slide_speed: function () {
             if (this.slide_speed_input != this.socket_message.slide_speed) {
-                if (this.slide_clock) {
-                    clearInterval(this.slide_clock);
-                }
                 if (this.slide_speed_input == 5) {
                     this.socket_message.slide_interval = 1000;
                 } else if (this.slide_speed_input == 4) {
@@ -737,9 +703,6 @@ const app = Vue.createApp({
                     this.socket_message.slide_interval = 10000;
                 }
                 this.socket_message.slide_speed = this.slide_speed_input;
-                if (!this.socket_message.slide_show_paused) {
-                    this.start_slideshow();
-                }
                 this.sendMessageToSocket();
             }
         }
@@ -778,7 +741,6 @@ const app = Vue.createApp({
     },
     created: function () {
         this.connectSocket();
-
         this.get_session();
         this.get_teams("all");
         this.nav_items = this.default_nav_items;

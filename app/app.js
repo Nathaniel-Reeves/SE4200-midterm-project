@@ -57,6 +57,49 @@ function uuidv4() {
   });
 }
 
+function increment_active_slide(slideshow) {
+    // Find the index of the current active slide
+    const currentIndex = slideshow.findIndex(slide => slide.active === true);
+
+    // Find the index of the next slide with list=1
+    var nextIndex = slideshow.findIndex(slide => slide.id > currentIndex && slide.list === 1);
+
+    // If no slide with list=1 was found after the current active slide, wrap around to the first slide with list=1
+    if (nextIndex === -1) {
+        nextIndex = slideshow.findIndex(slide => slide.list === 1);
+    }
+
+    // Update the array with the new active slide
+    slideshow[currentIndex].active = false;
+    slideshow[nextIndex].active = true;
+
+    return slideshow;
+}
+
+function slide_clock(slide_interval) {
+    console.log("Clock Started at interval: " + slide_interval);
+    var clock = setInterval(function () {
+        var codecamp_file = fs.readFileSync('./codecamp.json');
+        var codecamp_data = JSON.parse(codecamp_file);
+        codecamp_data.slide_show = increment_active_slide(codecamp_data.slide_show);
+        wss.clients.forEach(function (client) {
+            client.send(JSON.stringify(codecamp_data), {binary: false });
+        });
+        fs.writeFile(
+            './codecamp.json', 
+            JSON.stringify(codecamp_data),
+            function(err) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+    }, slide_interval);
+    return clock;
+}
+
+var codecamp_file = fs.readFileSync('./codecamp.json');
+var codecamp_data = JSON.parse(codecamp_file);
+var clock = slide_clock(codecamp_data.slide_interval);
 
 websocket_clients = {};
 // Handle WebSocket connection
@@ -105,7 +148,12 @@ wss.on('connection', function connection(wsclient) {
                         if (err) {
                             console.log(err);
                         } else {
+                            console.log("Clock Stopped");
                             console.log("Data Saved");
+                            clearInterval(clock);
+                            if (!data.slide_show_paused) {
+                                clock = slide_clock(data.slide_interval);
+                            }
                         }
                     });
 
