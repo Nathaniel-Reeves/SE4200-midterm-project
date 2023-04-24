@@ -2,18 +2,22 @@
 Web II midterm project.  A simple web app to help teams and judges at codecamp.
 
 Here is the deployed application link:
-http://codecamp2.us-east-1.elasticbeanstalk.com/
+http://codecamp2.us-east-1.elasticbeanstalk.com//
 
 If you would like to explore the app without creating an account, here are some credentials you can use.
 
-### All permissions allowed
+### All permissions
 
 ```json
 {
-    "email": "john@example.com",
-    "password": "asdfasdf123",
-    "first_name": "John",
-    "last_name": "Doe",
+    "email": "mark@example.com",
+    "password": "secretword",
+    "first_name": "Mark",
+    "last_name": "Johnson",
+    "judge": true,
+    "admin": true,
+    "attendant": true,
+    "contestant": true
 }
 ```
 
@@ -29,6 +33,8 @@ If you would like to explore the app without creating an account, here are some 
 }
 
 ```
+
+
 ### Contestant permissions only
 
 ```json
@@ -36,32 +42,16 @@ If you would like to explore the app without creating an account, here are some 
     "email": "amy@example.com",
     "password": "letmein",
     "first_name": "Amy",
-    "last_name": "Brown"
+    "last_name": "Brown",
+    "contestant": true
 }
 ```
 
 All user passwords are stored as encrypted hashes using bcrypt.
 
-## UPDATE 3/10/2023 1:00 AM
+## Websocket Connection
 
-I fixed the judge actions we discussed I should fix at the end of my presentation.  A judge can now submit a record, delete records, and update records.
-
-## Submission Notes 3/9/2023 5:38 AM
-
-Unfortunately, I did not get this project finished as much as I'd like it to be.  The back end was completely done with solid validation for every input and great feedback for each output.  However, I did not leave enough time to complete the clint side of this project.  
-
-I understand this might dock me on the grade, however I would like to concider giving me some leway.  There was so much I learned working on this project and I put so much time and effort into it.  I just allowed my project to get a bit larger than I could handle in this time frame.  By the time the big presentation comes around, this project will be much more complete.
-
-A list of ideas I wanted to implement but didn't get around to..
-
-1. A server synced countdown timer that is configured through a admin console.
-1. The ability to change what is displayed on the website from the admin console.  Such as sponsorship ads and other branding.
-1. The ability to save a logged in state for a user.  It looks like I need a extension to vue to get this to work. I tried to mess with it but ultimately gave up to try and finish the rest of this assignment.
-1. Include better photography for the home page and other pages.  
-1. A judge console that is personalized to the account of the user. From this console, a judge could add, change, or delete judge entries as needed.
-1. A attendent console.  This is meant to be for the front desk person that could help contestants with changes to their team while at the codecamp event. 
-1. A radar chart that displays the results of each team in convenient format.  I tried my best to get chartjs to work with vue however I couldn't figure it out.  As a placeholder for this feature, I included a radar chart image I found on Google.
-
+This app useses a websocket to update the timer and presentation slides to each client.  Changes to the timer and presentation slides are only accessible through a admin account login.  Once a admin account is logged in, a admin console page will become available to the user with all the UI elements to make changes to the presentation and timer.
 
 ## Visual Design Process
 
